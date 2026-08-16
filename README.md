@@ -219,7 +219,3 @@ GOOS=android GOARCH=arm64 CGO_ENABLED=1 \
 
 **GPL-3.0-or-later** — see [LICENSE](LICENSE).
 
-This is required because OpenCall links
-[`go.mau.fi/libsignal`](https://github.com/mautrix/libsignal), which is
-GPL-3.0. Other dependencies (`whatsmeow` MPL-2.0, `meowcaller` MIT,
-`modernc.org/sqlite` BSD-3) remain compatible.
