@@ -55,7 +55,18 @@ Built on [`whatsmeow`](https://github.com/mautrix/whatsmeow) and
 ```bash
 git clone https://github.com/Lamprozx/OpenCall
 cd OpenCall
-go build -o OpenCall .
+go build -o OpenCall ./cmd/opencall
+```
+
+## Project structure
+
+```
+cmd/opencall/        entry point + CLI command wiring (package main)
+internal/app/        shared kernel: logger, diag, noise filter, tmpdir, arg helpers
+internal/call/       call orchestration: connect, events, interactive console
+internal/console/    raw-mode terminal UI (ConsoleUI + Picker)
+internal/media/      media pipeline: play options, fx, ffmpeg, call state
+internal/session/    multi-session registry + auth flows
 ```
 
 ### Prebuilt binaries
@@ -178,7 +189,7 @@ pause, resume, stop, meter on|off, status, loglevel <level>, help, quit
 ## Building for Android (Termux)
 
 ```bash
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o OpenCall-linux-arm64 .
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o OpenCall-linux-arm64 ./cmd/opencall
 ```
 
 or, for a native Android build with cgo DNS (needs the NDK):
@@ -186,7 +197,7 @@ or, for a native Android build with cgo DNS (needs the NDK):
 ```bash
 GOOS=android GOARCH=arm64 CGO_ENABLED=1 \
   CC=<ndk>/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang \
-  go build -o OpenCall-android-arm64 .
+  go build -o OpenCall-android-arm64 ./cmd/opencall
 ```
 
 ---
