@@ -1,0 +1,17 @@
+# Binaries
+/OpenCall
+/OpenCall-*
+/ffmpeg-min-*
+
+# Session & auth data (sensitive)
+/sessions/
+/auth_info/
+
+# Temp / converted media
+/.tmp/
+*.h264
+*.wav
+
+# Editor / OS
+.DS_Store
+*.swp
