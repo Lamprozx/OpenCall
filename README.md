@@ -3,7 +3,11 @@
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 [![Go version](https://img.shields.io/badge/Go-1.25%2B-00ADD8.svg?logo=go&logoColor=white)](#requirements)
 [![Release](https://img.shields.io/github/v/release/Lamprozx/OpenCall?label=release)](https://github.com/Lamprozx/OpenCall/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Lamprozx/OpenCall)](https://goreportcard.com/report/github.com/Lamprozx/OpenCall)
+![Termux Support](https://img.shields.io/badge/Termux-Support-000000?style=flat&logo=gnu-bash&logoColor=white)
+
+
+
+
 
 A WhatsApp calling CLI for the terminal. Place and receive 1:1 and group calls,
 stream audio/video, apply real-time audio effects, join call links, and manage
@@ -62,14 +66,8 @@ authentication/session management and
   — a ~3–4 MB static binary with only what OpenCall needs (mp3/wav/opus decode,
   libx264, and the audio filters).
 
-  ```bash
-  # Termux (Android arm64)
-  cp ffmpeg-min-arm64 "$PREFIX/bin/ffmpeg" && chmod +x "$PREFIX/bin/ffmpeg"
+Note : opencall will ask you to install `ffmpeg-minimal` automatically to your system if you don't have ffmpeg installed before 
 
-  # Linux amd64
-  sudo cp ffmpeg-min-linux-amd64 /usr/local/bin/ffmpeg
-  sudo chmod +x /usr/local/bin/ffmpeg
-  ```
 
 ---
 
