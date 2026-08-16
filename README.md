@@ -78,32 +78,40 @@ Pick your platform. The asset names match the release exactly.
 ### Termux (Android, arm64)
 
 ```bash
-wget https://github.com/Lamprozx/OpenCall/releases/download/v1.0.0/OpenCall-android-arm64
-chmod +x OpenCall-android-arm64
-./OpenCall-android-arm64 auth --pair 628xxxxxxxxxx
+wget https://github.com/Lamprozx/OpenCall/releases/download/v1.0.0/opencall-arm64
+chmod +x opencall-arm64
+./opencall-arm64 auth --pair 628xxxxxxxxxx
 ```
 
 ### Linux (amd64)
 
 ```bash
 wget https://github.com/Lamprozx/OpenCall/releases/download/v1.0.0/OpenCall-linux-amd64
-chmod +x OpenCall-linux-amd64
-sudo mv OpenCall-linux-amd64 /usr/local/bin/opencall
-opencall auth --pair <phone>
+chmod +x opencall-amd64
+sudo mv openpall-amd64 /usr/local/bin/opencall
+opencall-amd64 auth --pair <phone>
 ```
 
-Then:
+Example use for termux user:
 
 ```bash
 # 1) Log in (QR code by default, or pairing code)
-./OpenCall auth                          # scan QR
-./OpenCall auth --pair 6281234567890     # or pair a number
+./opencall-arm64 auth                          # scan QR
+./opencall-arm64 auth --pair 6281234567890     # or pair a number
 
-# 2) Receive calls (answer/reject from the console)
-./OpenCall listen
+# 2) Receive calls (answer/reject from the console with interactive terminal)
+./opencall-arm64 listen
 
 # 3) Place a call
-./OpenCall call 6281234567890
+./opencall-arm64 call 6281234567890
+# *place a call with custom sounds you want
+./opencall-arm64 call 6281234567890 --play '/storage/emulated/0/Downloads/<your_sound>.mp3'
+
+# 4) Place a video call 
+./opencall-arm64 call 6281234567890 --video
+# *place a video call with custom video you want
+./opencall-arm64 call 6281234567890 --video --video-file '/storage/emulated/0
+
 ```
 
 > The Android build uses the NDK + cgo so DNS resolves natively (no
