@@ -46,6 +46,19 @@ Built on [`whatsmeow`](https://github.com/mautrix/whatsmeow) and
   `--reverb`, …) and non-Annex-B video transcoding (`--video-file foo.mp4`).
   Plain `--play` works without it.
 
+  Instead of the full `ffmpeg` package (~347 MB on Termux), use the custom
+  minimal build: **[ffmpeg-minimal](https://github.com/Lamprozx/ffmpeg-minimal)**
+  — a ~3–4 MB static binary with only what OpenCall needs (mp3/wav/opus decode,
+  libx264, and the audio filters).
+
+  ```bash
+  # Termux (Android arm64)
+  cp ffmpeg-min-arm64 "$PREFIX/bin/ffmpeg" && chmod +x "$PREFIX/bin/ffmpeg"
+
+  # Linux amd64
+  cp ffmpeg-min-linux-amd64 /usr/local/bin/ffmpeg && chmod +x /usr/local/bin/ffmpeg
+  ```
+
 ---
 
 ## Install
