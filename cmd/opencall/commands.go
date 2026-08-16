@@ -179,8 +179,11 @@ func runCall(ctx context.Context, cancel context.CancelFunc, args []string) {
 	}
 	defer wa.Disconnect()
 
+	// A video file implies a video call: without it the call is placed as a
+	// plain voice call and the camera stream is never negotiated.
+	isVideo := *video || *videoFile != ""
 	var c *meowcaller.Call
-	if *video {
+	if isVideo {
 		c, err = client.CallWithOptions(ctx, target, meowcaller.CallOptions{Video: true})
 	} else {
 		c, err = client.Call(ctx, target)
@@ -199,7 +202,7 @@ func runCall(ctx context.Context, cancel context.CancelFunc, args []string) {
 	call.MonitorRinging(ctx, c, target)
 
 	log.Info().Str("target", target).Str("call_id", c.ID()).
-		Bool("video", *video).Msg("call placed — media starts when the peer answers")
+		Bool("video", isVideo).Msg("call placed — media starts when the peer answers")
 	<-ctx.Done()
 }
 

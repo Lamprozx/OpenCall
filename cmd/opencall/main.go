@@ -218,8 +218,8 @@ playback options:
   --loop <N>       repeat each file N times. N is a mandatory
                    positive integer (e.g. --loop 10); a missing or non-integer
                    value is an error
-  --video-file F   stream F as your camera in a --video call. Raw Annex-B .h264
-                   is used as-is; other containers (.mp4/.mkv/...) are
+  --video-file F   stream F as your camera (implies --video). Raw Annex-B
+                   .h264 is used as-is; other containers (.mp4/.mkv/...) are
                    transcoded to baseline H.264 in /tmp via ffmpeg (originals
                    untouched); requires ffmpeg in PATH. Same .tmp fallback as
                    --play applies.
