@@ -22,6 +22,11 @@ var (
 	TermUI *ConsoleUI
 )
 
+// IsTerminal reports whether the given file descriptor refers to a terminal.
+func IsTerminal(fd int) bool {
+	return ttyIsTerminal(fd)
+}
+
 // ConsoleUI is an interactive, raw-mode terminal UI that draws a scrolling log
 // region above an input box with an optional live VU meter.
 type ConsoleUI struct {

@@ -23,6 +23,11 @@ func convertAudioToWAV(src string, loop int, fx *fxOptions) (string, func(), err
 	out := tmp.Name()
 	tmp.Close()
 
+	if !app.FFmpegAvailable() {
+		os.Remove(out)
+		return "", nil, fmt.Errorf("ffmpeg not found — audio effects require it\n%s", app.FFmpegInstallHint())
+	}
+
 	var inOpts ffmpeg.KwArgs
 	if loop > 1 {
 		inOpts = ffmpeg.KwArgs{"stream_loop": strconv.Itoa(loop - 1)}
@@ -107,6 +112,11 @@ func convertVideoToAnnexB(src string) (string, bool, func(), error) {
 	}
 	out := tmp.Name()
 	tmp.Close()
+
+	if !app.FFmpegAvailable() {
+		os.Remove(out)
+		return "", false, nil, fmt.Errorf("ffmpeg not found — video transcoding requires it\n%s", app.FFmpegInstallHint())
+	}
 
 	args := ffmpeg.KwArgs{
 		"bsf:v": "h264_metadata=aud=insert",

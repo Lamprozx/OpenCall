@@ -105,6 +105,12 @@ func (p *PlayOptions) Validate() error {
 	return nil
 }
 
+// RequiresFFmpeg reports whether this playback config needs ffmpeg
+// (audio effects are applied via ffmpeg).
+func (p *PlayOptions) RequiresFFmpeg() bool {
+	return p.fx != nil && !p.fx.empty()
+}
+
 func (p *PlayOptions) Register(fs *flag.FlagSet) {
 	fs.StringVar(&p.files, "play", "", "stream .mp3/.wav/.opus files, comma-separated, played left to right")
 	fs.StringVar(&p.volume, "volume", "", "volume adjustment, e.g. +5s (5% louder) or -3s (3% quieter)")

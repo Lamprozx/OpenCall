@@ -19,6 +19,21 @@ import (
 	"opencall/internal/session"
 )
 
+// ensureFFmpeg offers to install the minimal ffmpeg build when the current
+// command needs it (audio effects or video transcoding) but ffmpeg is missing.
+func ensureFFmpeg(play *media.PlayOptions, videoFile string) {
+	if play.RequiresFFmpeg() {
+		if err := app.EnsureFFmpeg("audio effects"); err != nil {
+			os.Exit(1)
+		}
+	}
+	if videoFile != "" {
+		if err := app.EnsureFFmpeg("video transcoding (--video-file)"); err != nil {
+			os.Exit(1)
+		}
+	}
+}
+
 func runAuth(ctx context.Context, cancel context.CancelFunc, args []string) {
 	if len(args) > 0 {
 		switch args[0] {
@@ -103,6 +118,7 @@ func runListen(ctx context.Context, cancel context.CancelFunc, args []string) {
 		fmt.Fprintln(os.Stderr, err)
 		usage()
 	}
+	ensureFFmpeg(play, "")
 
 	log := zerolog.Ctx(ctx)
 	wa, client, err := call.Connect(ctx)
@@ -154,6 +170,7 @@ func runCall(ctx context.Context, cancel context.CancelFunc, args []string) {
 		usage()
 	}
 	target := fs.Arg(0)
+	ensureFFmpeg(play, *videoFile)
 
 	log := zerolog.Ctx(ctx)
 	wa, client, err := call.Connect(ctx)
@@ -204,6 +221,7 @@ func runGroup(ctx context.Context, cancel context.CancelFunc, args []string) {
 		fmt.Fprintln(os.Stderr, err)
 		usage()
 	}
+	ensureFFmpeg(play, "")
 
 	log := zerolog.Ctx(ctx)
 	wa, client, err := call.Connect(ctx)
@@ -253,6 +271,7 @@ func runGroupJoin(ctx context.Context, cancel context.CancelFunc, args []string)
 		fmt.Fprintln(os.Stderr, err)
 		usage()
 	}
+	ensureFFmpeg(play, "")
 
 	log := zerolog.Ctx(ctx)
 	wa, client, err := call.Connect(ctx)
@@ -405,6 +424,7 @@ func runLink(ctx context.Context, cancel context.CancelFunc, args []string) {
 		if fs.NArg() < 1 {
 			usage()
 		}
+		ensureFFmpeg(play, "")
 		wa, client, err := call.Connect(ctx)
 		if err != nil {
 			log.Fatal().Err(err).Msg("connect failed")

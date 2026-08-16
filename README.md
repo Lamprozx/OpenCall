@@ -46,6 +46,10 @@ Built on [`whatsmeow`](https://github.com/mautrix/whatsmeow) and
   `--reverb`, …) and non-Annex-B video transcoding (`--video-file foo.mp4`).
   Plain `--play` works without it.
 
+  If you use effects or `--video-file` without ffmpeg installed, OpenCall
+  detects it and offers to download + install the minimal build for you
+  automatically.
+
   Instead of the full `ffmpeg` package (~347 MB on Termux), use the custom
   minimal build: **[ffmpeg-minimal](https://github.com/Lamprozx/ffmpeg-minimal)**
   — a ~3–4 MB static binary with only what OpenCall needs (mp3/wav/opus decode,
