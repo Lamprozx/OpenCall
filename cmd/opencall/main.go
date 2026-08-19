@@ -32,7 +32,7 @@ func main() {
 	}
 	log.SetOutput(console.TermOut)
 
-	rest, levelArg, quiet, showNoise, diagDir := extractGlobalFlags(os.Args[1:])
+	rest, levelArg, quiet, showNoise, diagDir, forceIPv4 := extractGlobalFlags(os.Args[1:])
 
 	var rec *diag.Recorder
 	if diagDir != "" {
@@ -54,6 +54,9 @@ func main() {
 		logger.Info().Str("dir", diagDir).
 			Msg("--diag: writing call diagnostics (xmpp/relay/rtp/media JSONL) — logs stay at the requested verbosity")
 		ctx = context.WithValue(ctx, app.DiagCtxKey{}, rec)
+	}
+	if forceIPv4 {
+		ctx = context.WithValue(ctx, app.ForceIPv4CtxKey{}, true)
 	}
 
 	if len(rest) < 1 {
@@ -94,7 +97,7 @@ func main() {
 	}
 }
 
-func extractGlobalFlags(args []string) (rest []string, level string, quiet, showNoise bool, diagDir string) {
+func extractGlobalFlags(args []string) (rest []string, level string, quiet, showNoise bool, diagDir string, forceIPv4 bool) {
 	for i := 0; i < len(args); i++ {
 		a := args[i]
 		switch {
@@ -113,6 +116,8 @@ func extractGlobalFlags(args []string) (rest []string, level string, quiet, show
 			quiet = true
 		case a == "--show-noise" || a == "-show-noise":
 			showNoise = true
+		case a == "--force-ipv4" || a == "-force-ipv4":
+			forceIPv4 = true
 		case a == "--diag" || a == "-diag":
 			if i+1 >= len(args) {
 				fmt.Fprintln(os.Stderr, "--diag needs a value")
@@ -128,7 +133,7 @@ func extractGlobalFlags(args []string) (rest []string, level string, quiet, show
 			rest = append(rest, a)
 		}
 	}
-	return rest, level, quiet, showNoise, diagDir
+	return rest, level, quiet, showNoise, diagDir, forceIPv4
 }
 
 func resolveLogLevel(flagLevel string, quiet bool) zerolog.Level {
@@ -259,6 +264,12 @@ log options (can appear anywhere):
   --diag <dir>          write call diagnostics to <dir> as per-stream JSONL
                         (xmpp wire XML, keying, relay, RTP, media, call
                         state). The console keeps the requested verbosity
+
+connection options (can appear anywhere):
+  --force-ipv4          dial WhatsApp only over IPv4. Fixes
+                        "software caused connection abort" during pairing/login
+                        on carriers with broken IPv6 (common on some mobile
+                        data networks).
 
 During a call the interactive console accepts: answer, reject, hangup, react
 <emoji>, video on|off, accept-video, orientation <0-3>, handraise on|off,

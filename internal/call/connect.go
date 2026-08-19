@@ -118,7 +118,15 @@ func OpenClient(ctx context.Context, log *zerolog.Logger, dbPath string) (*whats
 	if err != nil {
 		return nil, fmt.Errorf("load device: %w", err)
 	}
-	return whatsmeow.NewClient(device, waLog.Zerolog(waLogger).Sub("wa")), nil
+	wa := whatsmeow.NewClient(device, waLog.Zerolog(waLogger).Sub("wa"))
+	if v, ok := ctx.Value(app.ForceIPv4CtxKey{}).(bool); ok && v {
+		// Broken IPv6 on some mobile carriers aborts the websocket with
+		// "software caused connection abort". Dial only IPv4 instead.
+		wa.SetWebsocketHTTPClient(app.IPv4OnlyHTTPClient())
+		wa.SetPreLoginHTTPClient(app.IPv4OnlyHTTPClient())
+		wa.SetMediaHTTPClient(app.IPv4OnlyHTTPClient())
+	}
+	return wa, nil
 }
 
 func connectClient(ctx context.Context, client *whatsmeow.Client, auth AuthOptions) error {

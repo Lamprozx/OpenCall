@@ -230,6 +230,8 @@ commands:
 --quiet               shorthand for --log-level warn
 --show-noise          keep background whatsmeow noise
 --diag <dir>          write per-stream call diagnostics as JSONL
+--force-ipv4          dial WhatsApp only over IPv4 (fixes "software caused
+                      connection abort" on carriers with broken IPv6)
 ```
 
 ### Interactive console (during a call)
@@ -348,6 +350,16 @@ multiple clients on the same number simultaneously.
 **Q: DNS lookup fails on Termux (`lookup web.whatsapp.com ... connection refused`).**
 Use the `OpenCall-android-arm64` build (NDK + cgo). It uses Android's native
 resolver, so you don't need `resolv-conf` or `proot`.
+
+**Q: Pairing generates a code, then fails with `software caused connection abort`.**
+This usually means the carrier's IPv6 routing is broken — the websocket connects
+over IPv6 and gets reset. Add `--force-ipv4` to dial WhatsApp over IPv4 only:
+
+```bash
+./OpenCall auth --force-ipv4 --pair 628xxxxxxxxxx
+```
+
+`--force-ipv4` works for every command (it's a global flag).
 
 **Q: I get `ffmpeg not found ...`.**
 That's expected — ffmpeg is only required for audio effects and non-raw video.
