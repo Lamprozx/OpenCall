@@ -230,8 +230,9 @@ commands:
 --quiet               shorthand for --log-level warn
 --show-noise          keep background whatsmeow noise
 --diag <dir>          write per-stream call diagnostics as JSONL
---force-ipv4          dial WhatsApp only over IPv4 (fixes "software caused
-                      connection abort" on carriers with broken IPv6)
+--allow-ipv6          enable IPv6 for WhatsApp connections (off by default;
+                      IPv4-only dialing avoids "software caused connection
+                      abort" on carriers with broken IPv6)
 ```
 
 ### Interactive console (during a call)
@@ -352,14 +353,10 @@ Use the `OpenCall-android-arm64` build (NDK + cgo). It uses Android's native
 resolver, so you don't need `resolv-conf` or `proot`.
 
 **Q: Pairing generates a code, then fails with `software caused connection abort`.**
-This usually means the carrier's IPv6 routing is broken — the websocket connects
-over IPv6 and gets reset. Add `--force-ipv4` to dial WhatsApp over IPv4 only:
-
-```bash
-./OpenCall auth --force-ipv4 --pair 628xxxxxxxxxx
-```
-
-`--force-ipv4` works for every command (it's a global flag).
+This means the carrier's IPv6 routing is broken — the websocket connects over
+IPv6 and gets reset. OpenCall already dials IPv4 only by default to avoid this,
+so make sure you're on a build from the last commit or newer. If you're on an
+IPv6-only network, re-enable IPv6 with `--allow-ipv6`.
 
 **Q: I get `ffmpeg not found ...`.**
 That's expected — ffmpeg is only required for audio effects and non-raw video.

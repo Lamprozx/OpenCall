@@ -12,7 +12,7 @@ func TestExtractGlobalFlags(t *testing.T) {
 		wantQuiet bool
 		wantNoise bool
 		wantDiag  string
-		wantIPv4  bool
+		wantIPv6  bool
 	}{
 		{[]string{"call", "6281"}, []string{"call", "6281"}, "", false, false, "", false},
 		{[]string{"call", "6281", "--log-level", "debug"}, []string{"call", "6281"}, "debug", false, false, "", false},
@@ -21,16 +21,16 @@ func TestExtractGlobalFlags(t *testing.T) {
 		{[]string{"call", "-log-level", "error", "-quiet"}, []string{"call"}, "error", true, false, "", false},
 		{[]string{"call", "6281", "--diag", "/tmp/d"}, []string{"call", "6281"}, "", false, false, "/tmp/d", false},
 		{[]string{"--diag=/tmp/d", "call"}, []string{"call"}, "", false, false, "/tmp/d", false},
-		{[]string{"auth", "--force-ipv4", "--pair", "6281"}, []string{"auth", "--pair", "6281"}, "", false, false, "", true},
-		{[]string{"-force-ipv4", "call", "6281"}, []string{"call", "6281"}, "", false, false, "", true},
+		{[]string{"auth", "--allow-ipv6", "--pair", "6281"}, []string{"auth", "--pair", "6281"}, "", false, false, "", true},
+		{[]string{"-allow-ipv6", "call", "6281"}, []string{"call", "6281"}, "", false, false, "", true},
 	}
 	for _, c := range cases {
-		rest, level, quiet, noise, diagDir, forceIPv4 := extractGlobalFlags(c.args)
+		rest, level, quiet, noise, diagDir, allowIPv6 := extractGlobalFlags(c.args)
 		if !eqSlice(rest, c.wantRest) || level != c.wantLevel || quiet != c.wantQuiet ||
-			noise != c.wantNoise || diagDir != c.wantDiag || forceIPv4 != c.wantIPv4 {
+			noise != c.wantNoise || diagDir != c.wantDiag || allowIPv6 != c.wantIPv6 {
 			t.Errorf("extractGlobalFlags(%v) = (%v, %q, %v, %v, %q, %v), want (%v, %q, %v, %v, %q, %v)",
-				c.args, rest, level, quiet, noise, diagDir, forceIPv4,
-				c.wantRest, c.wantLevel, c.wantQuiet, c.wantNoise, c.wantDiag, c.wantIPv4)
+				c.args, rest, level, quiet, noise, diagDir, allowIPv6,
+				c.wantRest, c.wantLevel, c.wantQuiet, c.wantNoise, c.wantDiag, c.wantIPv6)
 		}
 	}
 }
