@@ -119,15 +119,11 @@ func OpenClient(ctx context.Context, log *zerolog.Logger, dbPath string) (*whats
 		return nil, fmt.Errorf("load device: %w", err)
 	}
 	wa := whatsmeow.NewClient(device, waLog.Zerolog(waLogger).Sub("wa"))
-	// Dial IPv4 only by default: some mobile carriers have broken IPv6 that
-	// aborts the websocket with "software caused connection abort".
-	// --allow-ipv6 restores dual-stack dialing for IPv6-only networks.
-	allowIPv6, _ := ctx.Value(app.AllowIPv6CtxKey{}).(bool)
-	if !allowIPv6 {
-		wa.SetWebsocketHTTPClient(app.IPv4OnlyHTTPClient())
-		wa.SetPreLoginHTTPClient(app.IPv4OnlyHTTPClient())
-		wa.SetMediaHTTPClient(app.IPv4OnlyHTTPClient())
-	}
+	// Prefer IPv4 and auto-fallback to IPv6: some mobile carriers have broken
+	// IPv6 that aborts the websocket with "software caused connection abort".
+	wa.SetWebsocketHTTPClient(app.AutoFallbackHTTPClient())
+	wa.SetPreLoginHTTPClient(app.AutoFallbackHTTPClient())
+	wa.SetMediaHTTPClient(app.AutoFallbackHTTPClient())
 	return wa, nil
 }
 

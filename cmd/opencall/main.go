@@ -32,7 +32,7 @@ func main() {
 	}
 	log.SetOutput(console.TermOut)
 
-	rest, levelArg, quiet, showNoise, diagDir, allowIPv6 := extractGlobalFlags(os.Args[1:])
+	rest, levelArg, quiet, showNoise, diagDir := extractGlobalFlags(os.Args[1:])
 
 	var rec *diag.Recorder
 	if diagDir != "" {
@@ -55,10 +55,6 @@ func main() {
 			Msg("--diag: writing call diagnostics (xmpp/relay/rtp/media JSONL) — logs stay at the requested verbosity")
 		ctx = context.WithValue(ctx, app.DiagCtxKey{}, rec)
 	}
-	if allowIPv6 {
-		ctx = context.WithValue(ctx, app.AllowIPv6CtxKey{}, true)
-	}
-
 	if len(rest) < 1 {
 		prog := os.Args[0]
 		if prog == "" {
@@ -97,7 +93,7 @@ func main() {
 	}
 }
 
-func extractGlobalFlags(args []string) (rest []string, level string, quiet, showNoise bool, diagDir string, allowIPv6 bool) {
+func extractGlobalFlags(args []string) (rest []string, level string, quiet, showNoise bool, diagDir string) {
 	for i := 0; i < len(args); i++ {
 		a := args[i]
 		switch {
@@ -116,8 +112,6 @@ func extractGlobalFlags(args []string) (rest []string, level string, quiet, show
 			quiet = true
 		case a == "--show-noise" || a == "-show-noise":
 			showNoise = true
-		case a == "--allow-ipv6" || a == "-allow-ipv6":
-			allowIPv6 = true
 		case a == "--diag" || a == "-diag":
 			if i+1 >= len(args) {
 				fmt.Fprintln(os.Stderr, "--diag needs a value")
@@ -133,7 +127,7 @@ func extractGlobalFlags(args []string) (rest []string, level string, quiet, show
 			rest = append(rest, a)
 		}
 	}
-	return rest, level, quiet, showNoise, diagDir, allowIPv6
+	return rest, level, quiet, showNoise, diagDir
 }
 
 func resolveLogLevel(flagLevel string, quiet bool) zerolog.Level {
@@ -265,12 +259,6 @@ log options (can appear anywhere):
                         (xmpp wire XML, keying, relay, RTP, media, call
                         state). The console keeps the requested verbosity
 
-connection options (can appear anywhere):
-  --allow-ipv6          enable IPv6 for WhatsApp connections. By default
-                        OpenCall dials IPv4 only, because some mobile carriers
-                        have broken IPv6 that aborts the websocket with
-                        "software caused connection abort". Enable this only on
-                        an IPv6-only network.
 
 During a call the interactive console accepts: answer, reject, hangup, react
 <emoji>, video on|off, accept-video, orientation <0-3>, handraise on|off,

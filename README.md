@@ -230,9 +230,6 @@ commands:
 --quiet               shorthand for --log-level warn
 --show-noise          keep background whatsmeow noise
 --diag <dir>          write per-stream call diagnostics as JSONL
---allow-ipv6          enable IPv6 for WhatsApp connections (off by default;
-                      IPv4-only dialing avoids "software caused connection
-                      abort" on carriers with broken IPv6)
 ```
 
 ### Interactive console (during a call)
@@ -354,9 +351,8 @@ resolver, so you don't need `resolv-conf` or `proot`.
 
 **Q: Pairing generates a code, then fails with `software caused connection abort`.**
 This means the carrier's IPv6 routing is broken — the websocket connects over
-IPv6 and gets reset. OpenCall already dials IPv4 only by default to avoid this,
-so make sure you're on a build from the last commit or newer. If you're on an
-IPv6-only network, re-enable IPv6 with `--allow-ipv6`.
+IPv6 and gets reset. OpenCall dials IPv4 first and automatically falls back to
+IPv6 when IPv4 is unavailable, so no flag is needed.
 
 **Q: I get `ffmpeg not found ...`.**
 That's expected — ffmpeg is only required for audio effects and non-raw video.
