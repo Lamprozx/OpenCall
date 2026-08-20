@@ -78,7 +78,7 @@ Pick your platform. The asset names match the release exactly.
 ### Termux (Android, arm64)
 
 ```bash
-wget https://github.com/Lamprozx/OpenCall/releases/download/v1.0.0/opencall-arm64
+wget https://github.com/Lamprozx/OpenCall/releases/download/1.10.0/opencall-arm64
 chmod +x opencall-arm64
 ./opencall-arm64 auth --pair 628xxxxxxxxxx
 ```
@@ -86,10 +86,10 @@ chmod +x opencall-arm64
 ### Linux (amd64)
 
 ```bash
-wget https://github.com/Lamprozx/OpenCall/releases/download/v1.0.0/OpenCall-linux-amd64
+wget https://github.com/Lamprozx/OpenCall/releases/download/1.10.0/opencall-amd64
 chmod +x opencall-amd64
-sudo mv openpall-amd64 /usr/local/bin/opencall
-opencall-amd64 auth --pair <phone>
+sudo mv opencall-amd64 /usr/local/bin/opencall
+opencall auth --pair <phone>
 ```
 
 Example use for termux user:
@@ -110,9 +110,9 @@ Example use for termux user:
 # 4) Place a video call 
 ./opencall-arm64 call 6281234567890 --video
 # *place a video call with custom video you want
-./opencall-arm64 call 6281234567890 --video --video-file '/storage/emulated/0
-
+./opencall-arm64 call 6281234567890 --video-file '/storage/emulated/0/Movies/camera.mp4'
 ```
+
 
 > The Android build uses the NDK + cgo so DNS resolves natively (no
 > `proot`/`resolv.conf` tricks needed). If you only need playback without FX or
@@ -138,8 +138,8 @@ Prebuilt binaries:
 
 | Target | File |
 |---|---|
-| Linux amd64 | `OpenCall-linux-amd64` |
-| Android arm64 (Termux) | `OpenCall-android-arm64` |
+| Linux amd64 | `opencall-amd64` |
+| Android arm64 (Termux) | `opencall-arm64` |
 
 ---
 
@@ -328,7 +328,7 @@ make amd64
 make arm64 ANDROID_NDK_HOME=/path/to/android-ndk-r26d
 ```
 
-`make` (or `make all`) builds both. The prebuilt `OpenCall-android-arm64` binary
+`make` (or `make all`) builds both. The prebuilt `opencall-arm64` binary
 targets **Android 7.0 (API 24) or newer** (built with the `android24` NDK
 toolchain). WhatsApp's minimum Android version is lower, but the binary itself
 requires API 24+.
@@ -346,7 +346,7 @@ usage first, avoid mass/spam calling, add delays between calls, and don't run
 multiple clients on the same number simultaneously.
 
 **Q: DNS lookup fails on Termux (`lookup web.whatsapp.com ... connection refused`).**
-Use the `OpenCall-android-arm64` build (NDK + cgo). It uses Android's native
+Use the `opencall-arm64` build (NDK + cgo). It uses Android's native
 resolver, so you don't need `resolv-conf` or `proot`.
 
 **Q: Pairing generates a code, then fails with `software caused connection abort`.**
