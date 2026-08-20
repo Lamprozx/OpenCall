@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 )
 
-const version = "1.0.0"
+const version = "1.10.0"
 
 func printVersion() {
 	fmt.Printf("OpenCall %s\n", version)

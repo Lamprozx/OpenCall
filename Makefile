@@ -1,12 +1,14 @@
 # OpenCall — build targets.
 #
 #   make           build amd64 + arm64 (alias for `all`)
-#   make amd64     static linux/amd64 binary      -> OpenCall-linux-amd64
-#   make arm64     android/arm64 binary (Termux)  -> OpenCall-android-arm64
+#   make amd64     static linux/amd64 binary      -> opencall-amd64
+#   make arm64     android/arm64 binary (Termux)  -> opencall-arm64
 #   make build     native build for this host     -> OpenCall
 #   make test      go test ./...
 #   make vet       go vet ./...
 #   make clean     remove built binaries
+#
+# Release filenames use lowercase names so they match the GitHub release assets.
 #
 # The arm64 target cross-compiles for Android using the NDK so DNS resolves
 # natively in Termux (no proot/resolv.conf tricks). Set ANDROID_NDK_HOME to an
@@ -29,7 +31,7 @@ build:
 	CGO_ENABLED=0 go build -ldflags="$(LDFLAGS)" -o OpenCall $(PKG)
 
 amd64:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o OpenCall-linux-amd64 $(PKG)
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o opencall-amd64 $(PKG)
 
 arm64:
 	@test -x "$(NDK_CC)" || { \
@@ -39,7 +41,7 @@ arm64:
 		exit 1; \
 	}
 	CC="$(NDK_CC)" CXX="$(NDK_CXX)" CGO_ENABLED=1 GOOS=android GOARCH=arm64 \
-		go build -ldflags="$(LDFLAGS)" -o OpenCall-android-arm64 $(PKG)
+		go build -ldflags="$(LDFLAGS)" -o opencall-arm64 $(PKG)
 
 test:
 	go test ./...
@@ -48,4 +50,4 @@ vet:
 	go vet ./...
 
 clean:
-	rm -f OpenCall OpenCall-linux-amd64 OpenCall-android-arm64
+	rm -f OpenCall OpenCall-linux-amd64 OpenCall-android-arm64 opencall-amd64 opencall-arm64

@@ -1,6 +1,7 @@
 # Binaries
 /OpenCall
 /OpenCall-*
+/opencall-*
 /ffmpeg-min-*
 
 # Session & auth data (sensitive)
